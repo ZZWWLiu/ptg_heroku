@@ -125,5 +125,5 @@ CACHES = {
 }
 
 from mongoengine import connect
-connect('app26199140')
+connect('app26199140', host = 'mongodb://kahana.mongohq.com/app26199140')
 
