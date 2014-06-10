@@ -1,1 +1,1 @@
-web: gunicorn ParkToGo.wsgi
+web: honcho ParkToGo.wsgi
