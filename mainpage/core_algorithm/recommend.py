@@ -1,10 +1,12 @@
 
 import logging
-db_name = "parktogodb"
+db_name = "app26199140"
+HOST = 'mongodb://lzw:Buyaonao38@kahana.mongohq.com/app26199140'
+PORT = 10006
 
 def get_db(db_name):
     from pymongo import MongoClient
-    client = MongoClient('localhost:27017')
+    client = MongoClient(HOST, PORT)
     db = client[db_name]
     return db
 
