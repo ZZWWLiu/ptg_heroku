@@ -1,1 +1,1 @@
-web: honcho start
+web: python manage.py runserver
