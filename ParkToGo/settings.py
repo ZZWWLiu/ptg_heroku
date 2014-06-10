@@ -118,8 +118,8 @@ DATABASES = {
     'default' : {
         'ENGINE' : 'django_mongodb_engine',
         'NAME' : 'app26199140',
-        'USER': 'heroku',
-        'PASSWORD': 'U6Rp7DAzFYNZFk5pPlrlJlNE-us8zfXkDAqZNl6oJ1zHHITl0-fjcSDmV_87vYcvo0bsX5UuVWJYOYHO_vroTw', 
+        'USER': 'lzw',
+        'PASSWORD': 'Buyaonao38', 
         'HOST' : 'mongodb://kahana.mongohq.com/app26199140',
         'PORT' : 10006,
     },
