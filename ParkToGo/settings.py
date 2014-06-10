@@ -67,9 +67,9 @@ import mongoengine
 DATABASES = {
     'default' : {
         'ENGINE' : 'django_mongodb_engine',
-        'NAME' : 'parktogodb',
-        'HOST' : 'localhost',
-        'PORT' : '27017',
+        'NAME' : 'app26199140',
+        'HOST' : 'mongodb://kahana.mongohq.com/app26199140',
+        'PORT' : '10006',
     },
 }
 
