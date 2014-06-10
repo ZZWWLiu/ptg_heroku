@@ -63,17 +63,7 @@ WSGI_APPLICATION = 'ParkToGo.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
-import mongoengine
-DATABASES = {
-    'default' : {
-        'ENGINE' : 'django_mongodb_engine',
-        'NAME' : 'app26199140',
-        'USER': 'heroku',
-        'PASSWORD': 'U6Rp7DAzFYNZFk5pPlrlJlNE-us8zfXkDAqZNl6oJ1zHHITl0-fjcSDmV_87vYcvo0bsX5UuVWJYOYHO_vroTw', 
-        'HOST' : 'mongodb://kahana.mongohq.com/app26199140',
-        'PORT' : 10006,
-    },
-}
+
 
 # SESSION_ENGINE = 'mongoengine.django.sessions' # optional
 
@@ -123,7 +113,18 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+import mongoengine
+DATABASES = {
+    'default' : {
+        'ENGINE' : 'django_mongodb_engine',
+        'NAME' : 'app26199140',
+        'USER': 'heroku',
+        'PASSWORD': 'U6Rp7DAzFYNZFk5pPlrlJlNE-us8zfXkDAqZNl6oJ1zHHITl0-fjcSDmV_87vYcvo0bsX5UuVWJYOYHO_vroTw', 
+        'HOST' : 'mongodb://kahana.mongohq.com/app26199140',
+        'PORT' : 10006,
+    },
+}
 
 from mongoengine import connect
-connect('app26199140', host = 'mongodb://kahana.mongohq.com/app26199140')
-
+# connect('app26199140', alias='default',host = 'mongodb://kahana.mongohq.com/app26199140')
+connect('app26199140', alias='default')
