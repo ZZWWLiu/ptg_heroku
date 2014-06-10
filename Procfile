@@ -1,1 +1,1 @@
-web: honcho ParkToGo.wsgi
+web: honcho start
