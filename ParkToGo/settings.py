@@ -68,6 +68,8 @@ DATABASES = {
     'default' : {
         'ENGINE' : 'django_mongodb_engine',
         'NAME' : 'parktogodb',
+        'HOST' : 'localhost',
+        'PORT' : '27017',
     },
 }
 
