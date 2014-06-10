@@ -125,6 +125,6 @@ DATABASES = {
     },
 }
 
-from mongoengine import connect
+from mongoengine import register_connection
 # connect('app26199140', alias='default',host = 'mongodb://kahana.mongohq.com/app26199140')
-connect('app26199140', alias='default')
+register_connection(name = 'app26199140', alias='default')
