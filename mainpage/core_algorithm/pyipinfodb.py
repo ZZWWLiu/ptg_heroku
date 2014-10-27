@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import json, urllib, urllib2, socket
-# from google.appengine.api import urlfetch
 import re
 
 
@@ -33,17 +32,8 @@ class IPInfo() :
         else :
             passdict["timezone"] = "false"
         urldata = urllib.urlencode(passdict)
-        print urldata
+        # print urldata
         url = baseurl + urldata
-        # urlobj = urllib2.urlopen(url)
-        # urlobj = urlfetch.fetch(url)
-        # urlobj = urlfetch.fetch(url, payload=None, method='GET', headers={}, allow_truncated=False, follow_redirects=True, deadline=20, validate_certificate=False)
-        # if urlobj.status_code == 200:
-        #     data = urlobj.content
-        #     datadict = json.loads(data)
-        #     return datadict
-        # else:
-        #     return None
         headers = {}
         data = {}
         data['language'] = 'Python'
@@ -63,7 +53,6 @@ class IPInfo() :
         If no IP is given, then the location of the client is given.  
         The timezone option defaults to False, to spare the server some queries."""
 
-        # baseurl = "http://api.ipinfodb.com/v2/ip_query.php"
         baseurl = "http://api.ipinfodb.com/v3/ip-city/?"
         return self.GetIPInfo(baseurl, ip, timezone)
 

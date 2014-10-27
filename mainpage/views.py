@@ -8,12 +8,80 @@ import time
 import json
 from core_algorithm import weather, recommend,pyipinfodb
 from django.core.cache import cache
-# set test to False when deploy
-test = False
-# import re
-# import hashlib
+TEST = True
 # photo url = http://www.reserveamerica.com/webphotos/CO/pid50032/5/180x120.jpg
 # src = http://www.reserveamerica.com + webphoto
+
+
+
+def homepage(request):
+	if request.method == 'GET':
+		coord = getCoord(request)
+		lat, lon = getLatLong(coord)
+		API_KEY = 'AIzaSyAnEt9j1iiUDG6X2cRxQ2GUfotwoe4vCCY'
+		google_maps = "https://maps.googleapis.com/maps/api/js?key="+API_KEY+"&sensor=false"
+		content = {'google_maps_src': google_maps ,
+		           'latitude' : lat,
+		           'longitude' : lon
+		           }
+		return render(request, 'mainpage/userform.html', content)
+
+def submit(request):
+	if request.method == 'POST':
+		form = LocationForm(request.POST)
+		if form.is_valid():
+			user_need = form.cleaned_data
+			ip = request.META['REMOTE_ADDR'] if not TEST else "67.169.27.214"
+			if user_need['coordinates'] == 'current':
+				coord = cache.get(ip)
+				if coord:
+					lat, lon = getLatLong(coord)
+				else: # in case the cache failed
+					coord = getCoord(request)
+					lat, lon = getLatLong(coord)
+					logging.error('using api to get coord --- cache failed')
+			else:
+				lat, lon = getLatLong(user_need['coordinates'])
+			class_id = int(user_need['parktype'])
+			resList = recommend.recommend(class_id, lat, lon)
+			res = resList[1]["result"]
+			resN = resList[0]["result"][0]
+			NweatherList = weather.getWeather(str(resN['coords']['lat']), str(resN['coords']['lon']))
+			resN['weather'] = NweatherList
+			resDetail = getResDetail(res)
+			API_KEY = 'AIzaSyAnEt9j1iiUDG6X2cRxQ2GUfotwoe4vCCY'
+			google_maps = "https://maps.googleapis.com/maps/api/js?key="+API_KEY+"&sensor=false"
+			content = {'results': resDetail,
+			           'Nresult': resN,
+					   'google_maps_src': google_maps ,
+		               'latitude' : lat,
+		               'longitude' : lon,
+		               'lat0': float(resN['coords']['lat']),
+		               'lon0': float(resN['coords']['lon'])
+		               }
+			return render(request, 'mainpage/recommend.html', content)
+
+
+# helper function should belong in controllers
+def getLatLong(s):
+	coord = s.split(',')
+	lat = float(coord[0])
+	lon = float(coord[1])
+	return (lat, lon)
+
+def getCoord(request):
+	ip_api_key = '97f4d203b989b3fe87045b255e7a29d42f403cafc8726c45172079dbaa60fbfe'
+	ipinfo = pyipinfodb.IPInfo(ip_api_key)
+	ip = request.META['REMOTE_ADDR'] if not TEST else "67.169.27.214"
+	coord = cache.get(ip)
+	# logging.error("ip is " + ip)
+	if coord is None: # if coord is not in the cache
+		dataDict = ipinfo.GetCity(ip = ip)
+		coord = dataDict["latitude"] +', '+dataDict["longitude"]
+		# logging.error("coord is : "+ coord)
+		cache.set(ip, coord, 300)
+	cache.set('ip', ip, 300)
+	return coord
 
 def getResDetail(res):
 	key = 'd2rttztqpfhbqjz42buq6duc'
@@ -49,100 +117,11 @@ def getResDetail(res):
 			weatherList = weather.getWeather(r['latitude'], r['longitude'])
 			cache.set(wkey, weatherList, 900)
 			logging.error('using weather api')
-		logging.error(weatherList[0])
+		# logging.error(weatherList[0])
 		detail['weather'] = weatherList
 		resDetail.append(detail)
 		time.sleep(0.6)
 	return resDetail
-
-# helper function
-def getLatLong(s):
-	coord = s.split(',')
-	lat = float(coord[0])
-	lon = float(coord[1])
-	return (lat, lon)
-
-def getCoord(request, test = False):
-	if test == False:
-		ra = 'REMOTE_ADDR'
-		s = "HTTP_X_AppEngine_CityLatLong"
-		# HTTP_X_APPENGINE_CITYLATLONG
-		coord = request.META[s.upper()]
-		ip = request.META[ra]
-		cache.set(ip, coord, 300)
-	else:
-		ip_api_key = '97f4d203b989b3fe87045b255e7a29d42f403cafc8726c45172079dbaa60fbfe'
-		ipinfo = pyipinfodb.IPInfo(ip_api_key)
-		ip = '67.169.27.214'
-		coord = cache.get(ip)
-		if coord is None:
-			dataDict = ipinfo.GetCity(ip = ip)
-			coord = dataDict["latitude"] +', '+dataDict["longitude"]
-			cache.set(ip, coord,300)
-			logging.error(coord)
-		cache.set('ip', ip,300)
-		logging.error(cache.get('ip'))
-	return coord
-
-
-def homepage(request):
-	if request.method == 'GET':
-		coord = getCoord(request, test = test)
-		lat, lon = getLatLong(coord)
-		API_KEY = 'AIzaSyAnEt9j1iiUDG6X2cRxQ2GUfotwoe4vCCY'
-		google_maps = "https://maps.googleapis.com/maps/api/js?key="+API_KEY+"&sensor=false"
-		content = {'google_maps_src': google_maps ,
-		           'latitude' : lat,
-		           'longitude' : lon
-		           }
-		return render(request, 'mainpage/userform.html', content)
-
-def submit(request):
-	if request.method == 'POST':
-		form = LocationForm(request.POST)
-		if form.is_valid():
-			user_need = form.cleaned_data
-			if test == False:
-				ra = 'REMOTE_ADDR'
-				ip = request.META[ra]
-			else:
-				ip = cache.get('ip')
-				# logging.error(ip)
-			if user_need['coordinates'] == 'current':
-				coord = cache.get(ip)
-				lat, lon = getLatLong(coord)
-				# logging.error('default coord')
-				# logging.error(coord)
-			else:
-				lat, lon = getLatLong(user_need['coordinates'])
-			class_id = int(user_need['parktype'])
-			# logging.error("printing the result1")
-			# logging.error(res)
-			resList = recommend.recommend(class_id, lat, lon)
-			res = resList[1]["result"]
-			# logging.error("printing the result")
-			# logging.error(res)
-			resN = resList[0]["result"][0]
-			# logging.error(resN)
-			NweatherList = weather.getWeather(str(resN['coords']['lat']), str(resN['coords']['lon']))
-			resN['weather'] = NweatherList
-			resDetail = getResDetail(res)
-			API_KEY = 'AIzaSyAnEt9j1iiUDG6X2cRxQ2GUfotwoe4vCCY'
-			google_maps = "https://maps.googleapis.com/maps/api/js?key="+API_KEY+"&sensor=false"
-			content = {'results': resDetail,
-			           'Nresult': resN,
-					   'google_maps_src': google_maps ,
-		               'latitude' : lat,
-		               'longitude' : lon,
-		               'lat0': float(resN['coords']['lat']),
-		               'lon0': float(resN['coords']['lon'])
-		               }
-			return render(request, 'mainpage/recommend.html', content)
-
-
-
-
-
 
 
 
