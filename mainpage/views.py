@@ -80,7 +80,6 @@ def getCoord(request):
 		coord = dataDict["latitude"] +', '+dataDict["longitude"]
 		# logging.error("coord is : "+ coord)
 		cache.set(ip, coord, 300)
-	cache.set('ip', ip, 300)
 	return coord
 
 def getResDetail(res):
