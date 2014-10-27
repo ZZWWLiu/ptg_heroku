@@ -8,7 +8,7 @@ import time
 import json
 from core_algorithm import weather, recommend,pyipinfodb
 from django.core.cache import cache
-TEST = True
+TEST = False
 # photo url = http://www.reserveamerica.com/webphotos/CO/pid50032/5/180x120.jpg
 # src = http://www.reserveamerica.com + webphoto
 
