@@ -84,7 +84,7 @@
                         <tbody>        
                             <thead><th>Date</th><th>Description</th><th>Min</th><th>Max</th></thead>
                             {% for day in Nresult.weather %}
-                            <tr><th>{{forloop.counter0|getDate}}</th><td><img src="http://openweathermap.org/img/w/{{day.weather.icon}}" height="30" width="30">{{day.weather.description}}</td><td>{{day.temp.min|floatformat}}</td><td>{{day.temp.max|floatformat}}</td></tr>
+                            <tr><th>{{forloop.counter0|getDate}}</th><td><img src="http://openweathermap.org/img/w/{{day.weather.icon}}.png" height="30" width="30">{{day.weather.description}}</td><td>{{day.temp.min|floatformat}}</td><td>{{day.temp.max|floatformat}}</td></tr>
                              {% endfor %}
                         </tbody>
                     </table>
@@ -129,7 +129,7 @@
                         <tbody>        
                             <thead><th>Date</th><th>Description</th><th>Min</th><th>Max</th></thead>
                             {% for day in park.weather %}
-                            <tr><th>{{forloop.counter0|getDate}}</th><td><img src="http://openweathermap.org/img/w/{{day.weather.icon}}" height="30" width="30">{{day.weather.description}}</td><td>{{day.temp.min|floatformat}}</td><td>{{day.temp.max|floatformat}}</td></tr>
+                            <tr><th>{{forloop.counter0|getDate}}</th><td><img src="http://openweathermap.org/img/w/{{day.weather.icon}}.png" height="30" width="30">{{day.weather.description}}</td><td>{{day.temp.min|floatformat}}</td><td>{{day.temp.max|floatformat}}</td></tr>
                              {% endfor %}
                         </tbody>
                     </table>

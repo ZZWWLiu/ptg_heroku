@@ -7,7 +7,6 @@ import logging
 import time
 import json
 from core_algorithm import weather, recommend,pyipinfodb
-
 from django.core.cache import cache
 # set test to False when deploy
 test = True
@@ -51,7 +50,7 @@ def getResDetail(res):
 			weatherList = weather.getWeather(r['latitude'], r['longitude'])
 			cache.set(wkey, weatherList, 900)
 			logging.error('using weather api')
-		# logging.error(weatherList[0])
+		logging.error(weatherList[0])
 		detail['weather'] = weatherList
 		resDetail.append(detail)
 		time.sleep(0.6)

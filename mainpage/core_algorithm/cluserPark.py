@@ -21,12 +21,7 @@ def read_data(filename):
 
 class Cluster():
     def __init__(self):
-    	# put your final clustering results 
-    	# in the variable self.results with the format
-    	# {index of cluster: [doc_id]} 
-        # e.g. {1:[4,46], 2:[0,11,13,14,15,37,58],...}
         self.results_id = {}
-    	# e.g. {1:["Houston rockets","houston texans"], 2:["dallas cowboys","jerry jones"],...}
         self.results = {}
         self.documents = [] # 1068 docs, doc format: {"facilityID":666666, "state": "CA", "amenity":["xxx", "aaa",...]}, ...
         self.searcher = cosine.Search()
@@ -36,24 +31,11 @@ class Cluster():
         docs have 1068 docs
         return a list of doc vector, [{'a': 1.23, 'tamu': 2, ..},{...}]
         """
-
-        # for idx,doc in enumerate(docs):
-        #     d = {}
-        #     d["id"] = idx
-        #     d["text"] = ""
-        #     for tweet in doc:
-        #         d["text"] += tweet["text"]
-        #     self.documents.append(d)
         print 'start index'
-        # print docs[0]
-        # self.documents.extend(docs) #get the copy of docs
         self.searcher.index_tweets(docs)
-        # for  self.searcher.vec_docs
         for idx, vector in enumerate(self.searcher.vec_docs):
             dic = {"vector":vector}
             self.documents.append(dic)
-            # self.documents[idx]["vector"] = vector
-        # print docs[0]
 
     def euclidean_dist_square(self, doc_a, doc_b): #calculate euclidean distance for two vector a and b
         # doc_a = {'a': 0.xxx, 'aa':1.xx, ...}
