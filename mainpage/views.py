@@ -9,13 +9,12 @@ import json
 from core_algorithm import weather, recommend,pyipinfodb
 from django.core.cache import cache
 # set test to False when deploy
-test = True
+test = False
 # import re
 # import hashlib
 # photo url = http://www.reserveamerica.com/webphotos/CO/pid50032/5/180x120.jpg
 # src = http://www.reserveamerica.com + webphoto
 
-# it's better to store all the parks info in database
 def getResDetail(res):
 	key = 'd2rttztqpfhbqjz42buq6duc'
 	baseUrl = 'http://www.reserveamerica.com'
