@@ -74,11 +74,11 @@ def getCoord(request):
 	ipinfo = pyipinfodb.IPInfo(ip_api_key)
 	ip = request.META['REMOTE_ADDR'] if not TEST else "67.169.27.214"
 	coord = cache.get(ip)
-	# logging.error("ip is " + ip)
+	logging.error("ip is " + ip)
 	if coord is None: # if coord is not in the cache
 		dataDict = ipinfo.GetCity(ip = ip)
 		coord = dataDict["latitude"] +', '+dataDict["longitude"]
-		# logging.error("coord is : "+ coord)
+		logging.error("coord is : "+ coord)
 		cache.set(ip, coord, 300)
 	return coord
 
