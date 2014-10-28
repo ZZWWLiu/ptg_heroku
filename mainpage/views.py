@@ -34,7 +34,6 @@ def submit(request):
 			ip = request.META['HTTP_X_FORWARDED_FOR'] if not TEST else "67.169.27.214"
 			if user_need['coordinates'] == 'current':
 				coord = cache.get(ip)
-				lat, lon = getLatLong(coord) ####
 				if coord:
 					lat, lon = getLatLong(coord)
 				else: # in case the cache failed
