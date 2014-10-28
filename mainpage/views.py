@@ -31,9 +31,10 @@ def submit(request):
 		form = LocationForm(request.POST)
 		if form.is_valid():
 			user_need = form.cleaned_data
-			ip = request.META['REMOTE_ADDR'] if not TEST else "67.169.27.214"
+			ip = request.META['HTTP_X_FORWARDED_FOR'] if not TEST else "67.169.27.214"
 			if user_need['coordinates'] == 'current':
 				coord = cache.get(ip)
+				lat, lon = getLatLong(coord) ####
 				if coord:
 					lat, lon = getLatLong(coord)
 				else: # in case the cache failed
@@ -72,7 +73,7 @@ def getLatLong(s):
 def getCoord(request):
 	ip_api_key = '97f4d203b989b3fe87045b255e7a29d42f403cafc8726c45172079dbaa60fbfe'
 	ipinfo = pyipinfodb.IPInfo(ip_api_key)
-	ip = request.META['REMOTE_ADDR'] if not TEST else "67.169.27.214"
+	ip = request.META['HTTP_X_FORWARDED_FOR'] if not TEST else "67.169.27.214"
 	coord = cache.get(ip)
 	logging.error("ip is " + ip)
 	if coord is None: # if coord is not in the cache
